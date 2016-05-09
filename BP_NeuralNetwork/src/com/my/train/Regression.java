@@ -92,18 +92,21 @@ public class Regression {
         MultiLayerNetwork net = new MultiLayerNetwork(new NeuralNetConfiguration.Builder()
                 .seed(seed)
                 .iterations(iterations)     
-                .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)          
+             //   .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)   
+                .optimizationAlgo(OptimizationAlgorithm.CONJUGATE_GRADIENT)    
+             //     .optimizationAlgo(OptimizationAlgorithm.HESSIAN_FREE)   
+                
                 .learningRate(learningRate)
                 .weightInit(WeightInit.XAVIER)//权值初始化
                 .updater(Updater.NESTEROVS)   //权值更新方式
            //    .updater(Updater.ADAGRAD)
                 .momentum(0.9)  //动量参数 parameter for momentum (used with Updater.NESTEROVS)
                 .list(3)
-                .layer(0, new DenseLayer.Builder().nIn(numInput).nOut(nHidden)  //19-361
+                .layer(0, new DenseLayer.Builder().nIn(numInput).nOut(nHidden)  
                         .activation("tanh")
                         .build())   
-                .layer(1, new DenseLayer.Builder().nIn(nHidden).nOut(nHidden)  //19-361
-                        .activation("relu")
+                .layer(1, new DenseLayer.Builder().nIn(nHidden).nOut(nHidden) 
+                        .activation("sigmoid")
                         .build())
                 .layer(2, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
                         .activation("identity")                          

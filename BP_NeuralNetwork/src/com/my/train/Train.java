@@ -188,8 +188,11 @@ public class Train {
     
         MultiLayerNetwork net = new MultiLayerNetwork(new NeuralNetConfiguration.Builder()
                 .seed(seed)
-                .iterations(iterations)     
-                .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)          
+                .iterations(iterations)                
+              //.optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)   
+                 .optimizationAlgo(OptimizationAlgorithm.LINE_GRADIENT_DESCENT) 
+              //.optimizationAlgo(OptimizationAlgorithm.CONJUGATE_GRADIENT)             
+              //.optimizationAlgo(OptimizationAlgorithm.HESSIAN_FREE)   
                 .learningRate(learningRate)
                 .weightInit(WeightInit.XAVIER)//权值初始化
                 .updater(Updater.NESTEROVS)   //权值更新方式
@@ -200,7 +203,7 @@ public class Train {
                         .activation("tanh")
                         .build())   
                 .layer(1, new DenseLayer.Builder().nIn(nHidden).nOut(nHidden)  
-                        .activation("relu")
+                        .activation("sigmoid")
                         .build())
                 .layer(2, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
                         .activation("identity")                          
