@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /***
- * 从flight_sha_201511_20163.v2.csv、histweather_201511_20163.csv中获取
+ *从数据中获取 机型、机场种类
  * 
  * *****/
 public class Comparison {

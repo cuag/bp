@@ -14,6 +14,9 @@ import org.nd4j.linalg.factory.Nd4j;
 import com.my.config.Modulus;
 import com.my.model.PredictData;
 
+/**
+ * 预测
+ * **/
 public class Predict {
 	
 	
@@ -57,7 +60,7 @@ public class Predict {
   	  
         INDArray out = savedNetwork.output(input, false);
         
-        return out.getDouble(0)/Modulus.DELAYS;
+        return out.getDouble(0);
 		
 	}
 

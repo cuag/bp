@@ -13,7 +13,9 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
 import com.my.config.Modulus;
-
+/**
+ * 批量预测
+ * **/
 public class PredictAll {
 
 	public static void main(String[] args) throws IOException {
@@ -70,8 +72,8 @@ public class PredictAll {
           	  });
           	  
           	  INDArray out = savedNetwork.output(input, false);
-              System.out.println(out.getDouble(0)/Modulus.DELAYS);
-              double dd = (out.getDouble(0)- Double.valueOf(item[20]))/Modulus.DELAYS; 
+              System.out.println(out.getDouble(0));
+              double dd = out.getDouble(0)- Double.valueOf(item[20]); 
               sum= sum+dd;
               if(dd>-10&&dd<10){
             	

@@ -7,7 +7,9 @@ import com.my.util.TimeUtil;
 import com.my.util.WeatherUtil;
 
 
-
+/**
+ * 归一化
+ * **/
 public class CanData {
 	
 	private double month;
@@ -90,7 +92,7 @@ public class CanData {
 		if(delays>120.0){
 			delays=120.0;
 		}
-		delays = delays*Modulus.DELAYS;
+		//delays = delays*Modulus.DELAYS;
 		
 	}
 	

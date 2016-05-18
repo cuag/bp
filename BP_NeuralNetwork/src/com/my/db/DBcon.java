@@ -17,7 +17,10 @@ import com.my.model.Flight;
 import com.my.model.Weather;
 
 import com.my.util.ValidData;
-
+/**
+ * 数据库air list_airtype表中存放机型对照表 list_airport存放机场对照表
+ * 连接数据库生成训练数据。
+ * **/
 public class DBcon {
 
 	// 数据库配置文件
@@ -41,7 +44,7 @@ public class DBcon {
 			SQLException, IOException {
 		
 		bfwrite = new BufferedWriter(new FileWriter(
-				"E:\\air\\train\\trainData.csv"));
+				"E:\\air\\train\\trainData-5-18.csv"));
 
 		Class.forName(name);// 指定连接类型
 		Connection conn = DriverManager.getConnection(url, user, password);// 获取连接

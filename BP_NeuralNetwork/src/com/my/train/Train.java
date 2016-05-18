@@ -32,6 +32,9 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import com.my.config.Modulus;
 
+/**
+ * 被Run调用，用于训练
+ * **/
 public class Train {
 	// Random number generator seed, for reproducability
 	public static final int seed = 12345;
@@ -41,7 +44,7 @@ public class Train {
     
 	private static final String PATH_config = "E:\\air\\config\\";
 	public static final int nSamples = 81074;
-	private static final String PATH_DATA = "E:\\air\\train\\trainData.csv";
+	private static final String PATH_DATA = "E:\\air\\train\\trainData-5-18.csv";
 	public static SplitTestAndTrain trainAndTest;
 
 	private static DataSetIterator getTrainingData(int batchSize) {
@@ -189,9 +192,9 @@ public class Train {
         MultiLayerNetwork net = new MultiLayerNetwork(new NeuralNetConfiguration.Builder()
                 .seed(seed)
                 .iterations(iterations)                
-              //.optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)   
-                 .optimizationAlgo(OptimizationAlgorithm.LINE_GRADIENT_DESCENT) 
-              //.optimizationAlgo(OptimizationAlgorithm.CONJUGATE_GRADIENT)             
+              .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)   
+              //   .optimizationAlgo(OptimizationAlgorithm.LINE_GRADIENT_DESCENT)              
+             // .optimizationAlgo(OptimizationAlgorithm.CONJUGATE_GRADIENT)             
               //.optimizationAlgo(OptimizationAlgorithm.HESSIAN_FREE)   
                 .learningRate(learningRate)
                 .weightInit(WeightInit.XAVIER)//权值初始化
@@ -203,7 +206,7 @@ public class Train {
                         .activation("tanh")
                         .build())   
                 .layer(1, new DenseLayer.Builder().nIn(nHidden).nOut(nHidden)  
-                        .activation("sigmoid")
+                        .activation("relu")
                         .build())
                 .layer(2, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
                         .activation("identity")                          
@@ -246,8 +249,8 @@ public class Train {
         
         int size = trainAndTest.getTest().getLabels().length();
         for(int i=0;i<size;i++){
-        	double label = trainAndTest.getTest().getLabels().getDouble(i)/Modulus.DELAYS;
-        	double out = output.getDouble(i)/Modulus.DELAYS;
+        	double label = trainAndTest.getTest().getLabels().getDouble(i);
+        	double out = output.getDouble(i);
         	double c = out-label;
         	
         	average = Math.abs(c) + average;

@@ -38,7 +38,7 @@ public class Regression {
   
 	
 	
-	private static final String PATH_DATA = "E:\\air\\train\\trainData.csv";
+	private static final String PATH_DATA = "E:\\air\\train\\trainData-5-18.csv";
 	private static final String PATH_config = "E:\\air\\config\\";
 	private static final String OUTPUT_result = "E:\\air\\config\\";
 	
@@ -50,9 +50,9 @@ public class Regression {
     public static final int nSamples = 81074;//
     
     //Number of epochs (full passes of the data)
-    public static final int nEpochs =10; //不知道情况越大越好
+    public static final int nEpochs =100; //不知道情况越大越好
     //Batch size: i.e., each epoch has nSamples/batchSize parameter updates
-    public static final int batchSize = 60;   //不知道情况越小越好
+    public static final int batchSize = 10000;   //不知道情况越小越好
     //Network learning rate
     public static final double learningRate = 1e-5; //学习率 
 
@@ -71,7 +71,8 @@ public class Regression {
     	
     	//Generate the training data
         DataSetIterator iterator = getTrainingData();
-      
+        
+
         //Create the network
         int numInput = 20;
         int numOutputs = 1;
@@ -92,10 +93,10 @@ public class Regression {
         MultiLayerNetwork net = new MultiLayerNetwork(new NeuralNetConfiguration.Builder()
                 .seed(seed)
                 .iterations(iterations)     
-             //   .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)   
-                .optimizationAlgo(OptimizationAlgorithm.CONJUGATE_GRADIENT)    
-             //     .optimizationAlgo(OptimizationAlgorithm.HESSIAN_FREE)   
-                
+                .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)   
+               // .optimizationAlgo(OptimizationAlgorithm.CONJUGATE_GRADIENT)    
+              //    .optimizationAlgo(OptimizationAlgorithm.HESSIAN_FREE)   
+            //    .optimizationAlgo(OptimizationAlgorithm.LINE_GRADIENT_DESCENT)
                 .learningRate(learningRate)
                 .weightInit(WeightInit.XAVIER)//权值初始化
                 .updater(Updater.NESTEROVS)   //权值更新方式
@@ -106,7 +107,7 @@ public class Regression {
                         .activation("tanh")
                         .build())   
                 .layer(1, new DenseLayer.Builder().nIn(nHidden).nOut(nHidden) 
-                        .activation("sigmoid")
+                        .activation("relu")
                         .build())
                 .layer(2, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
                         .activation("identity")                          
@@ -116,7 +117,7 @@ public class Regression {
                 .build()
         );
         net.init();
-   //   net.setListeners(new ScoreIterationListener(1)); //显示
+      net.setListeners(new ScoreIterationListener(1)); //显示
     
   
     
@@ -152,8 +153,8 @@ public class Regression {
         
         int size = trainAndTest.getTest().getLabels().length();
         for(int i=0;i<size;i++){
-        	double label = trainAndTest.getTest().getLabels().getDouble(i)/Modulus.DELAYS;
-        	double out = output.getDouble(i)/Modulus.DELAYS;
+        	double label = trainAndTest.getTest().getLabels().getDouble(i);
+        	double out = output.getDouble(i);
         	double c = out-label;
         	
         	average = Math.abs(c) + average;
@@ -302,7 +303,7 @@ public class Regression {
     
        List<DataSet> listDs = trainAndTest.getTrain().asList();;
      //   List<DataSet> listDs = dataSet.asList();
-    //  System.out.println(trainAndTest.getTrain().getLabels());
+     
      //   System.out.println(listDs.size());
         Collections.shuffle(listDs,rng);
       
