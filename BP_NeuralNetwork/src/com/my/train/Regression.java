@@ -50,11 +50,11 @@ public class Regression {
     public static final int nSamples = 81074;//
     
     //Number of epochs (full passes of the data)
-    public static final int nEpochs =100; //不知道情况越大越好
+    public static final int nEpochs =500; //不知道情况越大越好
     //Batch size: i.e., each epoch has nSamples/batchSize parameter updates
-    public static final int batchSize = 10000;   //不知道情况越小越好
+    public static final int batchSize = 80;   //不知道情况越小越好
     //Network learning rate
-    public static final double learningRate = 1e-5; //学习率 
+    public static final double learningRate = 5e-5; //学习率 
 
     
     public static SplitTestAndTrain trainAndTest;
@@ -90,24 +90,25 @@ public class Regression {
        //.L1 实现稀疏  (趋向于产生少量的特征，而其他的特征都是0)
         //.L2 防止过拟合，提升模型的泛化能力(L2会选择更多的特征，这些特征都会接近于0)。
     
+        
+        // .optimizationAlgo(OptimizationAlgorithm.CONJUGATE_GRADIENT)    
+        //    .optimizationAlgo(OptimizationAlgorithm.HESSIAN_FREE)   
+      //    .optimizationAlgo(OptimizationAlgorithm.LINE_GRADIENT_DESCENT)
+        
         MultiLayerNetwork net = new MultiLayerNetwork(new NeuralNetConfiguration.Builder()
                 .seed(seed)
                 .iterations(iterations)     
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)   
-               // .optimizationAlgo(OptimizationAlgorithm.CONJUGATE_GRADIENT)    
-              //    .optimizationAlgo(OptimizationAlgorithm.HESSIAN_FREE)   
-            //    .optimizationAlgo(OptimizationAlgorithm.LINE_GRADIENT_DESCENT)
                 .learningRate(learningRate)
                 .weightInit(WeightInit.XAVIER)//权值初始化
                 .updater(Updater.NESTEROVS)   //权值更新方式
-           //    .updater(Updater.ADAGRAD)
                 .momentum(0.9)  //动量参数 parameter for momentum (used with Updater.NESTEROVS)
                 .list(3)
-                .layer(0, new DenseLayer.Builder().nIn(numInput).nOut(nHidden)  
-                        .activation("tanh")
-                        .build())   
-                .layer(1, new DenseLayer.Builder().nIn(nHidden).nOut(nHidden) 
+               .layer(0, new DenseLayer.Builder().nIn(numInput).nOut(nHidden)  
                         .activation("relu")
+                        .build()) 
+                .layer(1, new DenseLayer.Builder().nIn(nHidden).nOut(nHidden) 
+                        .activation("tanh")
                         .build())
                 .layer(2, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
                         .activation("identity")                          

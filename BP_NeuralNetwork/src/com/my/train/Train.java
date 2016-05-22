@@ -20,6 +20,7 @@ import org.deeplearning4j.nn.api.OptimizationAlgorithm;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.Updater;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
+import org.deeplearning4j.nn.conf.layers.Layer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
@@ -206,7 +207,7 @@ public class Train {
                         .activation("tanh")
                         .build())   
                 .layer(1, new DenseLayer.Builder().nIn(nHidden).nOut(nHidden)  
-                        .activation("relu")
+                        .activation("sigmoid")
                         .build())
                 .layer(2, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
                         .activation("identity")                          

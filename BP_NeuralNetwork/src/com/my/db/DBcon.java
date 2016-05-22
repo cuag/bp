@@ -44,7 +44,7 @@ public class DBcon {
 			SQLException, IOException {
 		
 		bfwrite = new BufferedWriter(new FileWriter(
-				"E:\\air\\train\\trainData-5-18.csv"));
+				"E:\\air\\train\\trainData.csv"));
 
 		Class.forName(name);// 指定连接类型
 		Connection conn = DriverManager.getConnection(url, user, password);// 获取连接
