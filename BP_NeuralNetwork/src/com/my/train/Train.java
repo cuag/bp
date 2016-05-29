@@ -178,7 +178,7 @@ public class Train {
         int numOutputs = 1;
       
         
-        //sigmoid relu
+        //sigmoid relu  relu + tanh tanh+relu
 
         
 

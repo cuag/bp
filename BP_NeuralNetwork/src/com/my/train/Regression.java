@@ -50,9 +50,9 @@ public class Regression {
     public static final int nSamples = 81074;//
     
     //Number of epochs (full passes of the data)
-    public static final int nEpochs =500; //不知道情况越大越好
+    public static final int nEpochs =300; //不知道情况越大越好
     //Batch size: i.e., each epoch has nSamples/batchSize parameter updates
-    public static final int batchSize = 80;   //不知道情况越小越好
+    public static final int batchSize = 10;   //不知道情况越小越好
     //Network learning rate
     public static final double learningRate = 5e-5; //学习率 
 
@@ -104,9 +104,10 @@ public class Regression {
                 .updater(Updater.NESTEROVS)   //权值更新方式
                 .momentum(0.9)  //动量参数 parameter for momentum (used with Updater.NESTEROVS)
                 .list(3)
-               .layer(0, new DenseLayer.Builder().nIn(numInput).nOut(nHidden)  
+          
+                .layer(0, new DenseLayer.Builder().nIn( numInput).nOut(nHidden) 
                         .activation("relu")
-                        .build()) 
+                        .build())       
                 .layer(1, new DenseLayer.Builder().nIn(nHidden).nOut(nHidden) 
                         .activation("tanh")
                         .build())
@@ -301,7 +302,7 @@ public class Regression {
       
         trainAndTest = dataSet.splitTestAndTrain(0.7);
  
-    
+        
        List<DataSet> listDs = trainAndTest.getTrain().asList();;
      //   List<DataSet> listDs = dataSet.asList();
      
