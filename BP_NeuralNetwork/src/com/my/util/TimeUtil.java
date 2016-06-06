@@ -102,8 +102,8 @@ public class TimeUtil {
    //    System.out.println( d.minuteHandle("23:20", "01:30"));
        
  
-       System.out.println(getDayByDate("2015-01-29"));
-    
+   //    System.out.println(getDayByDate("2015-01-29"));
+		System.out.println(timeMinus("19:10","20:20"));
     
 	}
 

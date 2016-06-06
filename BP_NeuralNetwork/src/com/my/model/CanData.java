@@ -37,6 +37,8 @@ public class CanData {
 	private double arrWindstrength;   //到达机场风力
 		
 	private double delays;            //离港延误
+	
+
 
 
 	
@@ -56,7 +58,7 @@ public class CanData {
 	 * 
 	 * @return 返回flight , dep_weather, arr_weather 可以用于生成csv文件
 	 * **/
-	public void SetData(Flight flight , Weather dep_weather , Weather arr_weather){
+	public void SetData(Flight flight , Weather dep_weather , Weather arr_weather ){
 		
 			
 	
@@ -86,6 +88,9 @@ public class CanData {
 	    this.arrDesc = WeatherUtil.getWeaDesc(arr_weather.getDescription()) ; 
 	    this.arrWindir = WeatherUtil.getWeaWindir(arr_weather.getWindir()) ;
 	    this.arrWindstrength = WeatherUtil.getWindStrength(arr_weather.getWindstrength());
+	    
+	
+	  
 	
 	    //离港延误 小于-30的已经在ValidData中排除，如果delays>120则算作120
 		this.delays = TimeUtil.timeMinus(flight.getDepTime(),flight.getActDepTime());  //-30到120之间
@@ -105,6 +110,7 @@ public class CanData {
 				+ airType + ","+ distKm + "," + depAirport + "," + arrAirport+ "," 
 				+ depTemphi + ","+ depTemplow + "," + depDesc+ "," + depWindir + "," +depWindstrength + "," 
 				+ arrTemphi + ","+ arrTemplow + "," + arrDesc+ "," + arrWindir + "," +arrWindstrength + "," 
+			
 				+ delays; 
 	}
 	

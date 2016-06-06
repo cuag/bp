@@ -33,7 +33,7 @@ public class WeatherUtil {
 		 *   东南风~东北风  r=0.1+0.2/10 = 0.12
 		 * 
 		 * **/
-	public static double getWeaWindir(String str){
+/*	public static double getWeaWindir(String str){
 		
 		String[] descs = {"东南风","东北风","西南风","西北风","东风","西风","南风","北风","旋转不定"};
 		double[] conLevel = {0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9};
@@ -52,7 +52,36 @@ public class WeatherUtil {
 			r=r+0.05;
 		
 	    return r;
+	}*/
+	
+	
+	/**
+	 * 把风向描述转换为数字；
+	 * 
+	 *   虹桥机场为南北风向，所以东西风向影响大
+	 *   东南风~东北风  r=0.1+0.2/10 = 0.12
+	 * 
+	 * **/
+	public static double getWeaWindir(String str){
+	
+	String[] descs = {"东南风","东北风","西南风","西北风","东风","西风","南风","北风","旋转不定"};
+	double[] conLevel = {0.3,0.3,0.3,0.3,0.6,0.6,0.1,0.1,0.3};
+	double index = 1.0; 
+	double r = 0.0; //返回的值
+	for(String desc : str.split("~")){	
+		for(int i =0;i<descs.length;i++){
+			if(desc.equals(descs[i])){
+				r = r + conLevel[i]/index;
+				index = index*10.0;
+			}
+		}
 	}
+	//无持续风向加权0.05；
+	if(str.contains("无持续风向"))
+		r=r+0.05;
+	
+    return r;
+}
 	
 	/****
 	 * desc1 天气是累计的
