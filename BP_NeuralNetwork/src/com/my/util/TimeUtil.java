@@ -103,7 +103,7 @@ public class TimeUtil {
        
  
    //    System.out.println(getDayByDate("2015-01-29"));
-		System.out.println(timeMinus("19:10","20:20"));
+		System.out.println(timeMinus("23:15","00:34"));
     
 	}
 

@@ -38,7 +38,7 @@ public class Regression_SHA {
   
 	
 	
-	private static final String PATH_DATA = "E:\\air\\SHA\\trainData_SHA.csv";
+	private static final String PATH_DATA = "E:\\air\\SHA\\trainData.csv";
 	private static final String PATH_config = "E:\\air\\SHA\\";
 	private static final String OUTPUT_result = "E:\\air\\SHA\\";
 	
@@ -47,14 +47,14 @@ public class Regression_SHA {
     //Number of iterations per minibatch
     public static final int iterations = 1; 
     //Number of data points
-    public static final int nSamples = 38515;//
+    public static final int nSamples = 81074;//
     
     //Number of epochs (full passes of the data)
     public static final int nEpochs =100; //不知道情况越大越好
     //Batch size: i.e., each epoch has nSamples/batchSize parameter updates
     public static final int batchSize = 100;   //不知道情况越小越好
     //Network learning rate
-    public static final double learningRate = 1e-4; //学习率 
+    public static final double learningRate = 5e-5; //学习率 
 
     
     public static SplitTestAndTrain trainAndTest;
@@ -74,9 +74,9 @@ public class Regression_SHA {
         
 
         //Create the network
-        int numInput = 20;
+        int numInput = 21;
         int numOutputs = 1;
-        int nHidden = 60;
+        int nHidden = 63;
         
         //sigmoid relu
         
@@ -295,7 +295,7 @@ public class Regression_SHA {
         INDArray inputNDArray20 = Nd4j.create(input20, new int[]{nSamples,1}); 
         
 		INDArray inputNDArray = Nd4j.hstack(inputNDArray0,inputNDArray1,inputNDArray2,inputNDArray3,inputNDArray4,
-				inputNDArray5,inputNDArray7,inputNDArray8,inputNDArray9,inputNDArray10,inputNDArray11,inputNDArray12,
+				inputNDArray5,inputNDArray6,inputNDArray7,inputNDArray8,inputNDArray9,inputNDArray10,inputNDArray11,inputNDArray12,
 				inputNDArray13,inputNDArray14,inputNDArray15,inputNDArray16,inputNDArray17,inputNDArray18,inputNDArray19,inputNDArray20);
         
         INDArray outPut = Nd4j.create(output, new int[]{nSamples, 1});
