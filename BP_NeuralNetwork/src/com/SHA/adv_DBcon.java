@@ -88,7 +88,7 @@ public class adv_DBcon {
 		
 		/****************** END *****************************/
 
-		
+		  
 		
 		/***************** 将List加载到CanData用于数据处理 ********************/
 		CanData canData = new CanData(AIRTYPE_List, AIRPORT_List);
