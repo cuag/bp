@@ -60,7 +60,7 @@ public class CanData {
 	 * 
 	 * @return 返回flight , dep_weather, arr_weather 可以用于生成csv文件
 	 * **/
-	public void SetData(Flight flight , Weather dep_weather , Weather arr_weather , Flight adv_flight){
+	public void SetData(Flight flight , Weather dep_weather , Weather arr_weather , int adv_delays){
 		
 			
 	
@@ -91,7 +91,7 @@ public class CanData {
 	    this.arrWindir = WeatherUtil.getWeaWindir(arr_weather.getWindir()) ;
 	    this.arrWindstrength = WeatherUtil.getWindStrength(arr_weather.getWindstrength());
 	    
-	    this.advDelays  = TimeUtil.timeMinus(adv_flight.getArrTime(), adv_flight.getActArrTime())*0.01;
+	    this.advDelays  = adv_delays*0.01;
 	  
 	
 	    //离港延误 小于-30的已经在ValidData中排除，如果delays>120则算作120

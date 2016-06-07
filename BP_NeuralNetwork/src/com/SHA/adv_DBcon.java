@@ -17,6 +17,7 @@ import java.util.Map;
 
 import com.my.model.Flight;
 import com.my.model.Weather;
+import com.my.util.TimeUtil;
 import com.SHA.ValidData;
 /**
  * 数据库air list_airtype表中存放机型对照表 list_airport存放机场对照表
@@ -39,8 +40,7 @@ public class adv_DBcon {
 	// 机场
 	public final static List<String> AIRPORT_List = new ArrayList<String>();
 	
-	//前序航班
-	public final static Map AIR_Map = new HashMap();
+
 	
 	private static BufferedWriter bfwrite;
 
@@ -48,7 +48,7 @@ public class adv_DBcon {
 			SQLException, IOException {
 		
 		bfwrite = new BufferedWriter(new FileWriter(
-				"E:\\air\\SHA\\trainData_SHA.csv"));
+				"E:\\air\\SHA\\trainData.csv"));
 
 		Class.forName(name);// 指定连接类型
 		Connection conn = DriverManager.getConnection(url, user, password);// 获取连接
@@ -75,17 +75,7 @@ public class adv_DBcon {
 		}
 		pst_AIRPORT.close();
 		
-		/********* 从数据库读取前序航班对照表AIR_Map ************/
-		String sql_adv = "SELECT * FROM adv";
-
-		PreparedStatement pst_adv = conn.prepareStatement(sql_adv);
-		
-		ResultSet r_adv = pst_adv.executeQuery();
-		while (r_adv.next()) {
-			AIR_Map.put(r_adv.getString(1), r_adv.getString(2));
-		}
-		pst_adv.close();
-		
+	
 		/****************** END *****************************/
 
 		  
@@ -122,33 +112,41 @@ public class adv_DBcon {
 
 	
 			// 排除"取消","未知","已備降","已排班","n/a"情况	
-			if (ValidData.validData(flight)) {
-			
-			
+			if (ValidData.validData(flight)) {			
 				
 				/****前序航班到港****/
-				Flight adv_flight = new Flight(0, "null","null","null",
-						"null","null","null","null",
-						"null","null","00:00","null",
-						"null", "null","00:00","null",
-						"null","null","null", "null",
-						"null", "null","null");
-				if(AIR_Map.containsKey(flight.getCarrier()+flight.getFlightNoShort())){
-					String sql_advf = "SELECT * FROM tb_train WHERE TimeSeries = '"+flight.getTimeSeries()+"' AND FlightNo= '"+flight.getCarrier()+flight.getFlightNoShort()+"'";
-				    System.out.println(sql_advf);
+				
+				int adv_delays = 0;  //默认前序航班到港延误为0 
+				
+					String sql_advf = "SELECT * FROM tb_train WHERE TimeSeries = '"+flight.getTimeSeries()
+							+"' AND FlightNo= '"+flight.getCarrier()+(Integer.parseInt(flight.getFlightNoShort())-1)+"'"
+							+" AND ArrAirport='"+flight.getDepAirport()+"'" 
+							+" AND Acft='"+flight.getAcft()+"'";
+					System.out.println(flight.getFlightNo());
+					System.out.println(sql_advf);
 					PreparedStatement pst_advf = conn.prepareStatement(sql_advf);
 					ResultSet result_adv = pst_advf.executeQuery();
 					if(result_adv.next()) {
-						adv_count++;
-						adv_flight = new Flight(result_adv.getInt(1), result_adv.getString(2),result_adv.getString(3), result_adv.getString(4),
+						Flight advf = new Flight(result_adv.getInt(1), result_adv.getString(2),result_adv.getString(3), result_adv.getString(4),
 								result_adv.getString(5), result_adv.getString(6),result_adv.getString(7), result_adv.getString(8),
 								result_adv.getString(9), result_adv.getString(10),result_adv.getString(11), result_adv.getString(12),
 								result_adv.getString(13), result_adv.getString(14),result_adv.getString(15), result_adv.getString(16),
 								result_adv.getString(17), result_adv.getString(18),result_adv.getString(19), result_adv.getString(20),
 								result_adv.getString(21), result_adv.getString(22),result_adv.getString(23));
+						
+						int adv = TimeUtil.timeMinus(advf.getArrTime(), flight.getDepTime());
+						
+						if(adv>29&&adv<200){
+							System.out.println(true);
+							adv_delays =  TimeUtil.timeMinus(advf.getArrTime(), advf.getActArrTime());
+		                	adv_count++;
+						}
+	               
+						
+						
 					}
 					
-				}															
+																			
 				
 				/**** 查询天气 ****/
 				String sql_depW = "SELECT * FROM tb_weather WHERE date='"
@@ -210,7 +208,7 @@ public class adv_DBcon {
 				/******* END *********/
 
 				/***** 调用CanData处理数据 ****/
-				canData.SetData(flight, dep_weather, arr_weather, adv_flight);
+				canData.SetData(flight, dep_weather, arr_weather, adv_delays);
 				System.out.println(canData.toString());
 				num++;
 				bfwrite.write(canData.toString()+","+flight.getId());

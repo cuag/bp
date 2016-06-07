@@ -18,10 +18,10 @@ public class ValidData {
 			}
 		}
 		
-		if(!flight.getDepAirport().equals("SHA")){
+	/*	if(!flight.getDepAirport().equals("SHA")){
 	
 			return false;
-		}
+		}*/
 		
 		if(opCar.equals("N")){
 		
@@ -65,6 +65,20 @@ public class ValidData {
 			return false;*/
 		
 		return true;
+	}
+	
+	public static boolean checkADVflight(Flight advf,Flight f){
+		
+	//	if(f.getAcft().equals(advf.getAcft())&&f.getDepAirport().equals(advf.getArrAirport())){
+			int adv = TimeUtil.timeMinus(advf.getArrTime(), f.getDepTime());
+			
+			if(adv>29&&adv<200){
+				return true;
+			}
+	//	}
+		
+		
+		return false;
 	}
 	
 	public static void main(String argsp[]){
