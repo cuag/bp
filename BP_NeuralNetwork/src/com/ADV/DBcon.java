@@ -1,4 +1,4 @@
-package com.SHA;
+package com.ADV;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -9,21 +9,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-
-import java.util.Map;
-
+import com.my.model.CanData;
 import com.my.model.Flight;
 import com.my.model.Weather;
-import com.my.util.TimeUtil;
-import com.SHA.ValidData;
+import com.ADV.ValidData;
 /**
  * 数据库air list_airtype表中存放机型对照表 list_airport存放机场对照表
  * 连接数据库生成训练数据。
  * **/
-public class adv_DBcon {
+public class DBcon {
 
 	// 数据库配置文件
 	public static final String url = "jdbc:mysql://localhost:3306/air";;
@@ -40,15 +36,13 @@ public class adv_DBcon {
 	// 机场
 	public final static List<String> AIRPORT_List = new ArrayList<String>();
 	
-
-	
 	private static BufferedWriter bfwrite;
 
 	public static void main(String args[]) throws ClassNotFoundException,
 			SQLException, IOException {
 		
 		bfwrite = new BufferedWriter(new FileWriter(
-				"E:\\air\\SHA\\trainData.csv"));
+				"E:\\air\\SHA\\trainData_SHA.csv"));
 
 		Class.forName(name);// 指定连接类型
 		Connection conn = DriverManager.getConnection(url, user, password);// 获取连接
@@ -74,12 +68,8 @@ public class adv_DBcon {
 			AIRPORT_List.add(r_AIRPORT.getString(1));
 		}
 		pst_AIRPORT.close();
-		
-	
 		/****************** END *****************************/
 
-		  
-		
 		/***************** 将List加载到CanData用于数据处理 ********************/
 		CanData canData = new CanData(AIRTYPE_List, AIRPORT_List);
 
@@ -89,12 +79,9 @@ public class adv_DBcon {
 		PreparedStatement pst = conn.prepareStatement(sql);// 准备执行语句
 		ResultSet result = pst.executeQuery();
 		Flight flight;
-		
 		Weather dep_weather = new Weather();
 		Weather arr_weather = new Weather();
 	
-		int adv_count = 0;
-		
 		while (result.next()) {
 
 			flight = new Flight(result.getInt(1), result.getString(2),
@@ -112,42 +99,8 @@ public class adv_DBcon {
 
 	
 			// 排除"取消","未知","已備降","已排班","n/a"情况	
-			if (ValidData.validData(flight)) {			
-				
-				/****前序航班到港****/
-				
-				int adv_delays = 0;  //默认前序航班到港延误为0 
-				
-					String sql_advf = "SELECT * FROM tb_train WHERE TimeSeries = '"+flight.getTimeSeries()
-							+"' AND FlightNo= '"+flight.getCarrier()+(Integer.parseInt(flight.getFlightNoShort())-1)+"'"
-							+" AND ArrAirport='"+flight.getDepAirport()+"'" 
-							+" AND Acft='"+flight.getAcft()+"'";
-					System.out.println(flight.getFlightNo());
-					System.out.println(sql_advf);
-					PreparedStatement pst_advf = conn.prepareStatement(sql_advf);
-					ResultSet result_adv = pst_advf.executeQuery();
-					if(result_adv.next()) {
-						Flight advf = new Flight(result_adv.getInt(1), result_adv.getString(2),result_adv.getString(3), result_adv.getString(4),
-								result_adv.getString(5), result_adv.getString(6),result_adv.getString(7), result_adv.getString(8),
-								result_adv.getString(9), result_adv.getString(10),result_adv.getString(11), result_adv.getString(12),
-								result_adv.getString(13), result_adv.getString(14),result_adv.getString(15), result_adv.getString(16),
-								result_adv.getString(17), result_adv.getString(18),result_adv.getString(19), result_adv.getString(20),
-								result_adv.getString(21), result_adv.getString(22),result_adv.getString(23));
-						
-						int adv = TimeUtil.timeMinus(advf.getArrTime(), flight.getDepTime());
-						
-						if(adv>29&&adv<200){
-							System.out.println(true);
-							adv_delays =  TimeUtil.timeMinus(advf.getArrTime(), advf.getActArrTime());
-		                	adv_count++;
-						}
-	               
-						
-						
-					}
-					
-																			
-				
+			if (ValidData.validData(flight)) {
+		
 				/**** 查询天气 ****/
 				String sql_depW = "SELECT * FROM tb_weather WHERE date='"
 						+ flight.getTimeSeries() + "' AND city='"
@@ -208,7 +161,7 @@ public class adv_DBcon {
 				/******* END *********/
 
 				/***** 调用CanData处理数据 ****/
-				canData.SetData(flight, dep_weather, arr_weather, adv_delays);
+				canData.SetData(flight, dep_weather, arr_weather);
 				System.out.println(canData.toString());
 				num++;
 				bfwrite.write(canData.toString()+","+flight.getId());
@@ -222,7 +175,7 @@ public class adv_DBcon {
 		conn.close();
 		
 	//	System.out.println(data_log);
-		System.out.println(adv_count);
+		
 		System.out.println(num);
 	}
 

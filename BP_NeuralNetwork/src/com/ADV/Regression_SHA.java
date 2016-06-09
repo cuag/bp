@@ -1,4 +1,4 @@
-package com.SHA;
+package com.ADV;
 
 
 import org.apache.commons.io.FileUtils;
@@ -38,7 +38,7 @@ public class Regression_SHA {
   
 	
 	
-	private static final String PATH_DATA = "E:\\air\\SHA\\trainData.csv";
+	private static final String PATH_DATA = "E:\\air\\SHA\\trainData_SHA.csv";
 	private static final String PATH_config = "E:\\air\\SHA\\";
 	private static final String OUTPUT_result = "E:\\air\\SHA\\";
 	
@@ -47,7 +47,7 @@ public class Regression_SHA {
     //Number of iterations per minibatch
     public static final int iterations = 1; 
     //Number of data points
-    public static final int nSamples = 81074;//
+    public static final int nSamples = 38515;//
     
     //Number of epochs (full passes of the data)
     public static final int nEpochs =100; //不知道情况越大越好
@@ -74,9 +74,9 @@ public class Regression_SHA {
         
 
         //Create the network
-        int numInput = 21;
+        int numInput = 20;
         int numOutputs = 1;
-        int nHidden = 63;
+        int nHidden = 60;
         
         //sigmoid relu
         
@@ -131,12 +131,12 @@ public class Regression_SHA {
         }
         
       
-        try(DataOutputStream dos = new DataOutputStream(Files.newOutputStream(Paths.get(PATH_config+"coefficients.bin")))){
+        try(DataOutputStream dos = new DataOutputStream(Files.newOutputStream(Paths.get(PATH_config+"coefficients_SHA.bin")))){
             Nd4j.write(net.params(),dos);
         }
 
         //Write the network configuration:
-        FileUtils.write(new File(PATH_config+"conf.json"), net.getLayerWiseConfigurations().toJson());
+        FileUtils.write(new File(PATH_config+"conf_SHA.json"), net.getLayerWiseConfigurations().toJson());
         
         System.out.println("------------END---------------");
         
@@ -243,13 +243,13 @@ public class Regression_SHA {
         	  input0[i] = Double.valueOf(item[0]);   //月份
         	  input1[i] = Double.valueOf(item[1]);   //星期
         	  input2[i] = Double.valueOf(item[2]);   //日期
-        	  input3[i] = Double.valueOf(item[3]);   //机型
-        	  input4[i] = Double.valueOf(item[4]);   //距离
-        	  input5[i] = Double.valueOf(item[5]);   //计划飞行时间
-        	  input6[i] = Double.valueOf(item[6]);   //出发机场
-        	  input7[i] = Double.valueOf(item[7]);   //到达机场
-        	  input8[i] = Double.valueOf(item[8]);   //计划出发时间
-        	  input9[i] = Double.valueOf(item[9]);   //计划到达时间
+        	  input3[i] = Double.valueOf(item[3]);   //飞行时间
+        	  input4[i] = Double.valueOf(item[4]);   //出发时间
+        	  input5[i] = Double.valueOf(item[5]);   //到达时间
+        	  input6[i] = Double.valueOf(item[6]);   //机型
+        	  input7[i] = Double.valueOf(item[7]);   //距离
+        	  input8[i] = Double.valueOf(item[8]);   //出发机场
+        	  input9[i] = Double.valueOf(item[9]);   //到达机场
         	  input10[i] = Double.valueOf(item[10]); 
         	  input11[i] = Double.valueOf(item[11]);  
         	  input12[i] = Double.valueOf(item[12]); 
@@ -295,7 +295,7 @@ public class Regression_SHA {
         INDArray inputNDArray20 = Nd4j.create(input20, new int[]{nSamples,1}); 
         
 		INDArray inputNDArray = Nd4j.hstack(inputNDArray0,inputNDArray1,inputNDArray2,inputNDArray3,inputNDArray4,
-				inputNDArray5,inputNDArray6,inputNDArray7,inputNDArray8,inputNDArray9,inputNDArray10,inputNDArray11,inputNDArray12,
+				inputNDArray5,inputNDArray6,inputNDArray7,inputNDArray9,inputNDArray10,inputNDArray11,inputNDArray12,
 				inputNDArray13,inputNDArray14,inputNDArray15,inputNDArray16,inputNDArray17,inputNDArray18,inputNDArray19,inputNDArray20);
         
         INDArray outPut = Nd4j.create(output, new int[]{nSamples, 1});

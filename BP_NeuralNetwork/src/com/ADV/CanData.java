@@ -1,4 +1,4 @@
-package com.SHA;
+package com.ADV;
 
 import java.util.List;
 
@@ -65,8 +65,9 @@ public class CanData {
 			
 	
 		this.month = TimeUtil.getMonthByDate(flight.getTimeSeries())*0.08;  
-		this.day = TimeUtil.getDayByDate(flight.getTimeSeries())*0.03;
 		this.week = TimeUtil.getWeekByDate(flight.getTimeSeries())*0.14;
+		this.day = TimeUtil.getDayByDate(flight.getTimeSeries())*0.03;
+	
 		this.depTime = TimeUtil.getMinByHHSS(flight.getDepTime())*6.9e-4; 
 		this.arrTime = TimeUtil.getMinByHHSS(flight.getArrTime())*6.9e-4; 
 		
@@ -81,7 +82,7 @@ public class CanData {
 		this.depTemphi = Double.parseDouble(dep_weather.getTemphi())*Modulus.TEMPHI;
 	    this.depTemplow = Double.parseDouble(dep_weather.getTemplow())*Modulus.TEMPLOW;  //数据为 -1 到 1 之间
 	    this.depDesc = WeatherUtil.getWeaDesc(dep_weather.getDescription()) ;  //获取的数据已经介于 0-1之间
-	    this.depWindir = WeatherUtil.getWeaWindir(dep_weather.getWindir()) ;
+	    this.depWindir = WeatherUtil.getWeaWindir_SHA(dep_weather.getWindir()) ;
 	    this.depWindstrength = WeatherUtil.getWindStrength(dep_weather.getWindstrength());
 	    
 	    //到达机场天气

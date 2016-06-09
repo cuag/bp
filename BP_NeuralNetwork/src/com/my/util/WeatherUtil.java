@@ -33,7 +33,7 @@ public class WeatherUtil {
 		 *   东南风~东北风  r=0.1+0.2/10 = 0.12
 		 * 
 		 * **/
-	public static double getWeaWindir_SHA(String str){
+	public static double getWeaWindir(String str){
 		
 		String[] descs = {"东南风","东北风","西南风","西北风","东风","西风","南风","北风","旋转不定"};
 		double[] conLevel = {0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9};
@@ -62,7 +62,7 @@ public class WeatherUtil {
 	 *   东南风~东北风  r=0.1+0.2/10 = 0.12
 	 * 
 	 * **/
-	public static double getWeaWindir(String str){
+	public static double getWeaWindir_SHA(String str){
 	
 	String[] descs = {"东南风","东北风","西南风","西北风","东风","西风","南风","北风","旋转不定"};
 	double[] conLevel = {0.3,0.3,0.3,0.3,0.6,0.6,0.1,0.1,0.3};

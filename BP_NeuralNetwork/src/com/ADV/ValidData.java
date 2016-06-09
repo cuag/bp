@@ -1,4 +1,4 @@
-package com.SHA;
+package com.ADV;
 
 import com.my.model.Flight;
 import com.my.util.TimeUtil;
@@ -17,11 +17,11 @@ public class ValidData {
 				return false;
 			}
 		}
-		
-	/*	if(!flight.getDepAirport().equals("SHA")){
+	
+		if(!flight.getDepAirport().equals("SHA")){
 	
 			return false;
-		}*/
+		}
 		
 		if(opCar.equals("N")){
 		
