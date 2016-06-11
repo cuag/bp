@@ -38,7 +38,7 @@ public class Regression_ALL {
   
 	
 	
-	private static final String PATH_DATA = "E:\\air\\SHA\\trainData.csv";
+	private static final String PATH_DATA = "E:\\air\\SHA\\0611.csv";
 	private static final String PATH_config = "E:\\air\\SHA\\";
 	private static final String OUTPUT_result = "E:\\air\\SHA\\";
 	
@@ -50,7 +50,7 @@ public class Regression_ALL {
     public static final int nSamples = 81074;//
     
     //Number of epochs (full passes of the data)
-    public static final int nEpochs =100; //不知道情况越大越好
+    public static final int nEpochs =350; //不知道情况越大越好
     //Batch size: i.e., each epoch has nSamples/batchSize parameter updates
     public static final int batchSize = 100;   //不知道情况越小越好
     //Network learning rate
@@ -74,9 +74,9 @@ public class Regression_ALL {
         
 
         //Create the network
-        int numInput = 21;
+        int numInput = 23;
         int numOutputs = 1;
-        int nHidden = 63;
+        int nHidden = 70;
         
         //sigmoid relu
         
@@ -229,6 +229,8 @@ public class Regression_ALL {
         double [] input18 = new double[nSamples]; 
         double [] input19 = new double[nSamples]; 
         double [] input20 = new double[nSamples]; 
+        double [] input21 = new double[nSamples]; 
+        double [] input22 = new double[nSamples];
         
          BufferedReader reader;
 		try {
@@ -261,8 +263,10 @@ public class Regression_ALL {
         	  input18[i] = Double.valueOf(item[18]);  
         	  input19[i] = Double.valueOf(item[19]);     
         	  input20[i] = Double.valueOf(item[20]);     
+        	  input21[i] = Double.valueOf(item[21]);     
+        	  input22[i] = Double.valueOf(item[22]);
         	  
-        	  output[i] = Double.valueOf(item[21]);   //离港延误
+        	  output[i] = Double.valueOf(item[23]);   //离港延误
        
         	
         	  i++;
@@ -293,10 +297,12 @@ public class Regression_ALL {
         INDArray inputNDArray18 = Nd4j.create(input18, new int[]{nSamples,1}); 
         INDArray inputNDArray19 = Nd4j.create(input19, new int[]{nSamples,1}); 
         INDArray inputNDArray20 = Nd4j.create(input20, new int[]{nSamples,1}); 
+        INDArray inputNDArray21 = Nd4j.create(input21, new int[]{nSamples,1}); 
+        INDArray inputNDArray22 = Nd4j.create(input22, new int[]{nSamples,1}); 
         
 		INDArray inputNDArray = Nd4j.hstack(inputNDArray0,inputNDArray1,inputNDArray2,inputNDArray3,inputNDArray4,
 				inputNDArray5,inputNDArray6,inputNDArray7,inputNDArray8,inputNDArray9,inputNDArray10,inputNDArray11,inputNDArray12,
-				inputNDArray13,inputNDArray14,inputNDArray15,inputNDArray16,inputNDArray17,inputNDArray18,inputNDArray19,inputNDArray20);
+				inputNDArray13,inputNDArray14,inputNDArray15,inputNDArray16,inputNDArray17,inputNDArray18,inputNDArray19,inputNDArray20,inputNDArray21,inputNDArray22);
         
         INDArray outPut = Nd4j.create(output, new int[]{nSamples, 1});
         DataSet dataSet = new DataSet(inputNDArray, outPut);

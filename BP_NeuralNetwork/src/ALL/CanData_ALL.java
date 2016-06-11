@@ -21,6 +21,11 @@ public class CanData_ALL {
 	private double depTime;           //计划出发时间
 	private double arrTime;           //计划到达时间
 	
+	private double depHour;
+	private double depMin;
+	private double arrHour;
+	private double arrMin;  
+	
 	private double airType;           //机型
 	private double distKm;            //飞行距离 
 	private double depAirport;        //出发机场 
@@ -70,6 +75,12 @@ public class CanData_ALL {
 	
 		this.depTime = TimeUtil.getMinByHHSS(flight.getDepTime())*6.9e-4; 
 		this.arrTime = TimeUtil.getMinByHHSS(flight.getArrTime())*6.9e-4; 
+	
+		this.depHour = Integer.parseInt(flight.getDepTime().split(":")[0])*0.04 ;
+		this.depMin = Integer.parseInt(flight.getDepTime().split(":")[1])*0.016 ;
+		
+		this.arrHour = Integer.parseInt(flight.getArrTime().split(":")[0])*0.04;
+		this.arrMin = Integer.parseInt(flight.getArrTime().split(":")[1])*0.016 ;
 		
 	/***以下系数可能需要根据实际情况更改***/
 		this.airType=Double.parseDouble(AIRTYPE_List.indexOf(flight.getAcft())+1+"")*Modulus.AIRTYPE; //避免从0开始，所以第一个+1
@@ -107,7 +118,7 @@ public class CanData_ALL {
 	/**
 	 * 归一化的数据
 	 * **/
-	@Override
+/*	@Override
 	public String toString() {
 		return  month+","+ week + "," + day + "," + flightTime + "," + depTime + "," + arrTime + "," 	
 				+ airType + ","+ distKm + "," + depAirport + "," + arrAirport+ "," 
@@ -116,9 +127,16 @@ public class CanData_ALL {
 				+ advDelays + ","
 				+ delays; 
 	}
+	*/
 	
-	
-	
+	public String toString() {
+		return  month+","+ week + "," + day + "," + flightTime + "," + depHour + "," + depMin + "," + arrHour + "," + arrMin + "," 	
+				+ airType + ","+ distKm + "," + depAirport + "," + arrAirport+ "," 
+				+ depTemphi + ","+ depTemplow + "," + depDesc+ "," + depWindir + "," +depWindstrength + "," 
+				+ arrTemphi + ","+ arrTemplow + "," + arrDesc+ "," + arrWindir + "," +arrWindstrength + "," 
+				+ advDelays + ","
+				+ delays; 
+	}
 	
 
 

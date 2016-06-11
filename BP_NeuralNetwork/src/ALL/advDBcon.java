@@ -48,7 +48,7 @@ public class advDBcon {
 			SQLException, IOException {
 		
 		bfwrite = new BufferedWriter(new FileWriter(
-				"E:\\air\\SHA\\trainData.csv"));
+				"E:\\air\\SHA\\0611.csv"));
 
 		Class.forName(name);// 指定连接类型
 		Connection conn = DriverManager.getConnection(url, user, password);// 获取连接
