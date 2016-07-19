@@ -20,24 +20,24 @@ import util.ValidData;
 import model.Flight;
 import model.Weather;
 /**
- * 数据库air list_airtype表中存放机型对照表 list_airport存放机场对照表
- * 连接数据库生成训练数据。
+ * 鏁版嵁搴揳ir list_airtype琛ㄤ腑瀛樻斁鏈哄瀷瀵圭収琛� list_airport瀛樻斁鏈哄満瀵圭収琛�
+ * 杩炴帴鏁版嵁搴撶敓鎴愯缁冩暟鎹��
  * **/
 public class advDBcon {
-
-	// 数据库配置文件
+   
+	// 鏁版嵁搴撻厤缃枃浠�
 	public static final String url = "jdbc:mysql://localhost:3306/air";;
 	public static final String name = "com.mysql.jdbc.Driver";
 	public static final String user = "root";
 	public static final String password = "123";
 
-	public static String data_log = "*********缺失天气数据***********\n";
+	public static String data_log = "*********缂哄け澶╂皵鏁版嵁***********\n";
 
-	public static int num = 0; // 计数
+	public static int num = 0; // 璁℃暟
 
-	// 机型
+	// 鏈哄瀷
 	public final static List<String> AIRTYPE_List = new ArrayList<String>();
-	// 机场
+	// 鏈哄満
 	public final static List<String> AIRPORT_List = new ArrayList<String>();
 	
 
@@ -50,10 +50,10 @@ public class advDBcon {
 		bfwrite = new BufferedWriter(new FileWriter(
 				"E:\\air\\SHA\\trainData.csv"));
 
-		Class.forName(name);// 指定连接类型
-		Connection conn = DriverManager.getConnection(url, user, password);// 获取连接
+		Class.forName(name);// 鎸囧畾杩炴帴绫诲瀷
+		Connection conn = DriverManager.getConnection(url, user, password);// 鑾峰彇杩炴帴
 
-		/******* 从数据库读取机型列表 AIRTYPE_List ********/
+		/******* 浠庢暟鎹簱璇诲彇鏈哄瀷鍒楄〃 AIRTYPE_List ********/
 		String sql_AIRTYPE = "SELECT * FROM list_airtype";
 
 		PreparedStatement pst_AIRTYPE = conn.prepareStatement(sql_AIRTYPE);
@@ -64,7 +64,7 @@ public class advDBcon {
 		}
 		pst_AIRTYPE.close();
 
-		/********* 从数据库读取机场列表 AIRPORT_List ************/
+		/********* 浠庢暟鎹簱璇诲彇鏈哄満鍒楄〃 AIRPORT_List ************/
 		String sql_AIRPORT = "SELECT * FROM list_airport";
 
 		PreparedStatement pst_AIRPORT = conn.prepareStatement(sql_AIRPORT);
@@ -80,13 +80,13 @@ public class advDBcon {
 
 		  
 		
-		/***************** 将List加载到CanData用于数据处理 ********************/
+		/***************** 灏哃ist鍔犺浇鍒癈anData鐢ㄤ簬鏁版嵁澶勭悊 ********************/
 		CanData_ALL canData = new CanData_ALL(AIRTYPE_List, AIRPORT_List);
 
-		/**************** 数据查询 *******************/
+		/**************** 鏁版嵁鏌ヨ *******************/
 		//String sql = "SELECT * FROM tb_flight";
 		String sql = "SELECT * FROM tb_train";
-		PreparedStatement pst = conn.prepareStatement(sql);// 准备执行语句
+		PreparedStatement pst = conn.prepareStatement(sql);// 鍑嗗鎵ц璇彞
 		ResultSet result = pst.executeQuery();
 		Flight flight;
 		
@@ -111,12 +111,12 @@ public class advDBcon {
 					result.getString(23));
 
 	
-			// 排除"取消","未知","已備降","已排班","n/a"情况	
+			// 鎺掗櫎"鍙栨秷","鏈煡","宸插倷闄�","宸叉帓鐝�","n/a"鎯呭喌	
 			if (ValidData.validData(flight)) {			
 				
-				/****前序航班到港****/
+				/****鍓嶅簭鑸彮鍒版腐****/
 				
-				int adv_delays = 0;  //默认前序航班到港延误为0 
+				int adv_delays = 0;  //榛樿鍓嶅簭鑸彮鍒版腐寤惰涓�0 
 				
 					String sql_advf = "SELECT * FROM tb_train WHERE TimeSeries = '"+flight.getTimeSeries()
 							+"' AND FlightNo= '"+flight.getCarrier()+(Integer.parseInt(flight.getFlightNoShort())-1)+"'"
@@ -148,13 +148,13 @@ public class advDBcon {
 					
 																			
 				
-				/**** 查询天气 ****/
+				/**** 鏌ヨ澶╂皵 ****/
 				String sql_depW = "SELECT * FROM tb_weather WHERE date='"
 						+ flight.getTimeSeries() + "' AND city='"
-						+ flight.getDepCity() + "'";// 出发城市天气
+						+ flight.getDepCity() + "'";// 鍑哄彂鍩庡競澶╂皵
 				String sql_arrW = "SELECT * FROM tb_weather WHERE date='"
 						+ flight.getTimeSeries() + "' AND city='"
-						+ flight.getArrCity() + "'";// 到达城市天气
+						+ flight.getArrCity() + "'";// 鍒拌揪鍩庡競澶╂皵
 
 				PreparedStatement pst_dw = conn.prepareStatement(sql_depW);
 				ResultSet result_dw = pst_dw.executeQuery();
@@ -173,7 +173,7 @@ public class advDBcon {
 					dep_weather.setTemplow("0.0");
 					dep_weather.setDescription("0.0");
 					dep_weather.setWindir("0.0");
-					dep_weather.setWindstrength("微风"); // 为减小计算影响，这里设置为微风
+					dep_weather.setWindstrength("寰"); // 涓哄噺灏忚绠楀奖鍝嶏紝杩欓噷璁剧疆涓哄井椋�
 					data_log = data_log + "id=" + result.getString(1)
 							+ " TimeSeries=" + result.getString(2)
 							+ " DepCity=" + result.getString(7) + "\n";
@@ -198,7 +198,7 @@ public class advDBcon {
 					arr_weather.setTemplow("0.0");
 					arr_weather.setDescription("0.0");
 					arr_weather.setWindir("0.0");
-					arr_weather.setWindstrength("微风"); // 为减小计算影响，这里设置为微风
+					arr_weather.setWindstrength("寰"); // 涓哄噺灏忚绠楀奖鍝嶏紝杩欓噷璁剧疆涓哄井椋�
 
 					data_log = data_log + "id=" + result.getString(1)
 							+ " TimeSeries=" + result.getString(2)
@@ -207,7 +207,7 @@ public class advDBcon {
 				pst_aw.close();
 				/******* END *********/
 
-				/***** 调用CanData处理数据 ****/
+				/***** 璋冪敤CanData澶勭悊鏁版嵁 ****/
 				canData.SetData(flight, dep_weather, arr_weather, adv_delays);
 				System.out.println(canData.toString());
 				num++;
